@@ -26,23 +26,33 @@ class Instagram
         if (!$url) {
             return [
                 "success" => false,
-                "message" => "url/username hợp lệ"
+                "message" => "url/username không hợp lệ"
             ];
         }
 
-        $result = $this->curl($url, "GET", array(
+        $username = $this->extractUsernameFromInstagramURL($url);
+
+        echo $username;
+
+
+        $result = json_decode($this->curl("https://i.instagram.com/api/v1/users/web_profile_info/?username=".$username, "GET", array(
             "Cookie: sessionid=".$this->sessionId,
-            "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-         ));    
+            "User-Agent: Instagram 64.0.0.14.96",
+         )));  
 
-        $userId = explode('"', explode('{"query":{"content_type":"PROFILE","target_id":"', $result)[1])[0];
 
-        if (!isset($userId)) {
+
+        
+
+        if (!isset($result->data->user->id)) {
             return [
                 "success" => false,
                 "message" => "Không thể lấy info từ instagram"
             ];
         }
+
+        $userId = $result->data->user->id;
+
 
         $queryApi = json_decode($this->curl("https://i.instagram.com/api/v1/users/".$userId."/info/", "GET", array(
             "Cookie: sessionid=".$this->sessionId,
@@ -172,19 +182,21 @@ class Instagram
 
         }
 
-        $result = $this->curl($url, "GET", array(
+        $username = $this->extractUsernameFromInstagramURL($url);
+
+        $result = json_decode($this->curl("https://i.instagram.com/api/v1/users/web_profile_info/?username=".$username, "GET", array(
             "Cookie: sessionid=".$this->sessionId,
-            "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-         ));
+            "User-Agent: Instagram 64.0.0.14.96",
+         )));  
 
-        $userId = explode('"', explode('{"query":{"content_type":"PROFILE","target_id":"', $result)[1])[0];
-
-        if (!isset($userId)) {
+        if (!isset($result->data->user->id)) {
             return [
                 "success" => false,
                 "message" => "Không thể lấy info từ instagram"
             ];
         }
+
+        $userId = $result->data->user->id;
 
 
         $fetchStories = json_decode($this->curl('https://www.instagram.com/graphql/query/?query_hash=de8017ee0a7c9c45ec4260733d81ea31&variables=%7B%22reel_ids%22%3A%5B%22'.$userId.'%22%5D%2C%22tag_names%22%3A%5B%5D%2C%22location_ids%22%3A%5B%5D%2C%22highlight_reel_ids%22%3A%5B%5D%2C%22precomposed_overlay%22%3Afalse%2C%22show_story_viewer_list%22%3Atrue%2C%22story_viewer_fetch_count%22%3A50%2C%22story_viewer_cursor%22%3A%22%22%7D', "GET", array(
@@ -325,14 +337,30 @@ class Instagram
 
 
 
-
-    function checkFileType($code)
-	{
-		
-		$moreinfo = json_decode($parsed);
-		$type = $moreinfo->entry_data->PostPage[0]->graphql->shortcode_media->is_video;
-		return $type;
-	}
+    public function extractUsernameFromInstagramURL($url) {
+        $username = '';
+    
+        // Find the position of "instagram.com/" in the URL
+        $start = strpos($url, "instagram.com/");
+        
+        if ($start !== false) {
+            // Adjust the start position to point to the beginning of the username
+            $start += strlen("instagram.com/");
+            
+            // Find the end position of the username
+            $end = strpos($url, '/', $start);
+            
+            if ($end === false) {
+                // If no slash found, the username is till the end of the string
+                $username = substr($url, $start);
+            } else {
+                // Extract the username substring
+                $username = substr($url, $start, $end - $start);
+            }
+        }
+    
+        return $username;
+    }
 
 
     public function get_string_between($string, $start, $end)
@@ -408,9 +436,9 @@ class Instagram
 		}
 
         if ($this->proxy) {
-            curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, 1);
-            curl_setopt($ch, CURLOPT_PROXY, explode("@", $this->proxy)[0]);
-            curl_setopt($ch, CURLOPT_PROXYUSERPWD, explode("@", $this->proxy)[1]);
+            curl_setopt($s, CURLOPT_HTTPPROXYTUNNEL, 1);
+            curl_setopt($s, CURLOPT_PROXY, explode("@", $this->proxy)[0]);
+            curl_setopt($s, CURLOPT_PROXYUSERPWD, explode("@", $this->proxy)[1]);
         }
  
 		curl_setopt($s,CURLOPT_HEADER, 0);			 
