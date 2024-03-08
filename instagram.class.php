@@ -157,7 +157,7 @@ class Instagram
 
             $urls[] = array(
                 "type" => "video",
-                "url" => $result->items[0]->video_versions[0],
+                "url" => $result->items[0]->video_versions[0]->url,
                 "previewUrl" => $result->items[0]->image_versions2->candidates[0]
             );
             
