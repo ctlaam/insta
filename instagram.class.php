@@ -32,7 +32,6 @@ class Instagram
 
         $username = $this->extractUsernameFromInstagramURL($url);
 
-        echo $username;
 
 
         $result = json_decode($this->curl("https://i.instagram.com/api/v1/users/web_profile_info/?username=".$username, "GET", array(
