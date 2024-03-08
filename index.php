@@ -11,31 +11,31 @@ switch ($_GET["type"]) {
 
     case "avatar":
 
-        return json_encode($instaApi->downloadAvatar($_GET["url"]));
+        echo json_encode($instaApi->downloadAvatar($_GET["url"]));
 
         break;
 
     case "post":
 
-        return json_encode($instaApi->downloadPost($_GET["url"]));
+        echo json_encode($instaApi->downloadPost($_GET["url"]));
 
         break;
 
     case "reels":
 
-        return json_encode($instaApi->downloadPost($_GET["url"]));
+        echo json_encode($instaApi->downloadPost($_GET["url"]));
 
         break;
 
     case "stories":
 
-        return json_encode($instaApi->downloadStories($_GET["url"]));
+        echo json_encode($instaApi->downloadStories($_GET["url"]));
         
         break;
 
     case "highlight":
 
-        return json_encode($instaApi->downloadHighlightStories($_GET["url"]));
+        echo json_encode($instaApi->downloadHighlightStories($_GET["url"]));
     
         break;
 
