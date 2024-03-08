@@ -32,7 +32,7 @@ class Instagram
 
         $result = $this->curl($url, "GET", array(
             "Cookie: sessionid=".$this->sessionId,
-            "User-Agent: Instagram 64.0.0.14.96",
+            "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
          ));    
 
         $userId = explode('"', explode('{"query":{"content_type":"PROFILE","target_id":"', $result)[1])[0];
@@ -174,7 +174,7 @@ class Instagram
 
         $result = $this->curl($url, "GET", array(
             "Cookie: sessionid=".$this->sessionId,
-            "User-Agent: Instagram 64.0.0.14.96",
+            "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
          ));
 
         $userId = explode('"', explode('{"query":{"content_type":"PROFILE","target_id":"', $result)[1])[0];
