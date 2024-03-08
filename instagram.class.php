@@ -32,6 +32,8 @@ class Instagram
 
         $result = $this->curl($url);    
 
+        echo $result;
+
         $userId = explode('"', explode('{"query":{"content_type":"PROFILE","target_id":"', $result)[1])[0];
 
         if (!isset($userId)) {
