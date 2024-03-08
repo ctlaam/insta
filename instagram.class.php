@@ -30,9 +30,10 @@ class Instagram
             ];
         }
 
-        $result = $this->curl($url);    
-
-        echo $result;
+        $result = $this->curl($url, "GET", array(
+            "Cookie: sessionid=".$this->sessionId,
+            "User-Agent: Instagram 64.0.0.14.96",
+         ));    
 
         $userId = explode('"', explode('{"query":{"content_type":"PROFILE","target_id":"', $result)[1])[0];
 
@@ -171,7 +172,10 @@ class Instagram
 
         }
 
-        $result = $this->curl($url);
+        $result = $this->curl($url, "GET", array(
+            "Cookie: sessionid=".$this->sessionId,
+            "User-Agent: Instagram 64.0.0.14.96",
+         ));
 
         $userId = explode('"', explode('{"query":{"content_type":"PROFILE","target_id":"', $result)[1])[0];
 
