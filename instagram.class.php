@@ -111,26 +111,56 @@ class Instagram
 
         if ($result->items[0]->product_type == "carousel_container") {
 
-            $type = "image";
+            $type = "carousel";
             
             foreach ($result->items[0]->carousel_media as $carouselInfo) {
 
-                $urls[] = $carouselInfo->image_versions2->candidates[0]->url;
+                if ($carouselInfo->media_type == 1) {
+
+                    $urls[] = array(
+                        "type" => "image",
+                        "url" => $carouselInfo->image_versions2->candidates[0]->url,
+                        "previewUrl" => $carouselInfo->image_versions2->candidates[0]->url
+                    );
+
+                } else {
+
+                    $urls[] = array(
+                        "type" => "video",
+                        "url" => $carouselInfo->video_versions[0]->url,
+                        "previewUrl" => $carouselInfo->image_versions2->candidates[0]->url
+                    );
+
+                }
+
+                
 
             }
 
         }else if ($result->items[0]->product_type == "feed") {
 
-            $type = "image";
+            $type = "feed";
             
-            $urls[] = $result->items[0]->image_versions2->candidates[0];
+            $urls[] = array(
+                "type" => "image",
+                "url" => $result->items[0]->image_versions2->candidates[0],
+                "previewUrl" => $result->items[0]->image_versions2->candidates[0]
+            );
+
+
+
 
         }else if ($result->items[0]->product_type == "clips") { 
 
 
-            $type = "video";
+            $type = "clips";
+
+            $urls[] = array(
+                "type" => "video",
+                "url" => $result->items[0]->video_versions[0],
+                "previewUrl" => $result->items[0]->image_versions2->candidates[0]
+            );
             
-            $urls[] = $result->items[0]->video_versions[0];
 
 
 

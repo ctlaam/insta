@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: application/json; charset=utf-8');
 require("./instagram.class.php");
 
 $instaApi = new Instagram();
