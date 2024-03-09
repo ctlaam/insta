@@ -33,13 +33,11 @@ class Instagram
         $username = $this->extractUsernameFromInstagramURL($url);
 
 
-        echo "https://i.instagram.com/api/v1/users/web_profile_info/?username=".$username;
 
         $result = $this->curl("https://i.instagram.com/api/v1/users/web_profile_info/?username=".$username, "GET", array(
             "User-Agent: Instagram 64.0.0.14.96",
         ));  
 
-        echo $result;
 
         $result = json_decode($result);
 
@@ -77,7 +75,8 @@ class Instagram
             "success" => true,
             "message" => "Thành công !",
             "imageUrl" => $queryApi->user->hd_profile_pic_url_info->url,
-            "type" => "image"
+            "type" => "image",
+            "info" => $result->data->user
         ];
 
     
