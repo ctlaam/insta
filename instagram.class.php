@@ -219,7 +219,7 @@ class Instagram
         $username = $this->extractUsernameFromInstagramURL($url);
 
         $result = json_decode($this->curl("https://i.instagram.com/api/v1/users/web_profile_info/?username=".$username, "GET", array(
-            "Cookie: sessionid=0;",
+            "Cookie: sessionid=".$this->sessionId,
             "User-Agent: Instagram 64.0.0.14.96",
          )));  
 
