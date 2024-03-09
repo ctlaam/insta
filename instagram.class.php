@@ -380,7 +380,6 @@ class Instagram
 
         $reel_id = preg_match('/\/reels?\/*([\w]+)\//', $url, $matches) ? $matches[1] : null;
 
-        echo $reel_id;
 
         if (!$reel_id) {
             return [
@@ -407,7 +406,6 @@ class Instagram
             "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
          )), true);
 
-        var_dump($data);
     
 
         $url = [];
@@ -565,13 +563,5 @@ class Instagram
 
 
 }
-
-$instaApi = new Instagram();
-
-$instaApi->sessionId = "39408242373%3ALh57nkf0S6hU7f%3A14%3AAYd18dtdszRGvG8gFZm2ytAT_qJzvfIQkaZYzdvpdg";
-
-$instaApi->proxy = null;
-
-var_dump($instaApi->downloadReels("https://www.instagram.com/reel/C2mhtegvtGq/"));
 
 ?>
