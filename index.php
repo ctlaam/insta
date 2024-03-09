@@ -24,7 +24,7 @@ switch ($_GET["type"]) {
 
     case "reels":
 
-        echo json_encode($instaApi->downloadPost($_GET["url"]));
+        echo json_encode($instaApi->downloadReels($_GET["url"]));
 
         break;
 

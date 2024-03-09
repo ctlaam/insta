@@ -364,7 +364,80 @@ class Instagram
 
 
 
+    public function downloadReels($url)
+    {
 
+        if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
+
+            return [
+                "success" => false,
+                "message" => "url không hợp lệ"
+            ];
+
+        }
+
+        
+
+        $reel_id = preg_match('/\/reels?\/*([\w]+)\//', $url, $matches) ? $matches[1] : null;
+
+        echo $reel_id;
+
+        if (!$reel_id) {
+            return [
+                "success" => false,
+                "message" => "cant get reel id"
+            ];
+        }
+    
+        $link = "https://www.instagram.com/graphql/query/";
+        $headers = array(
+            'User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.193 Safari/537.36'
+        );
+        $variables = '{"child_comment_count":3,"fetch_comment_count":40,"has_threaded_comments":true,"parent_comment_count":24,"shortcode":"' . $reel_id . '"}';
+        $params = array(
+            'hl' => 'en',
+            'query_hash' => 'b3055c01b4b222b8a47dc12b090e4e64',
+            'variables' => $variables
+        );
+        $url = $link . '?' . http_build_query($params);
+
+
+        $data = json_decode($this->curl($url, "GET", array(
+            "Cookie: sessionid=".$this->sessionId,
+            "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+         )), true);
+
+        var_dump($data);
+    
+
+        $url = [];
+        
+    
+        try {
+            $video_link = $data['data']['shortcode_media']['video_url'];
+            $image_preview = $data['data']['shortcode_media']['display_url'];
+
+            $urls[] = array(
+                "video_url" => $video_link,
+                "image_url" => $image_preview
+            );
+
+            return [
+                "success" => true,
+                "message" => "success",
+                "type" => "reels",
+                "data" => $urls
+            ];
+
+
+
+        } catch (Exception $e) {
+            return [
+                "success" => false,
+                "message" => "error"
+            ];
+        }
+    }
 
     public function extractUsernameFromInstagramURL($url) {
         $username = '';
@@ -493,5 +566,12 @@ class Instagram
 
 }
 
+$instaApi = new Instagram();
+
+$instaApi->sessionId = "39408242373%3ALh57nkf0S6hU7f%3A14%3AAYd18dtdszRGvG8gFZm2ytAT_qJzvfIQkaZYzdvpdg";
+
+$instaApi->proxy = null;
+
+var_dump($instaApi->downloadReels("https://www.instagram.com/reel/C2mhtegvtGq/"));
 
 ?>
