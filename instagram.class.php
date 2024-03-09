@@ -34,10 +34,15 @@ class Instagram
 
 
 
-        $result = json_decode($this->curl("https://i.instagram.com/api/v1/users/web_profile_info/?username=".$username, "GET", array(
-            "Cookie: sessionid=0;",
+        $result = $this->curl("https://i.instagram.com/api/v1/users/web_profile_info/?username=".$username, "GET", array(
             "User-Agent: Instagram 64.0.0.14.96",
-         )));  
+        ));  
+
+        echo $result;
+
+        $result = json_decode($result);
+
+        
 
 
         
@@ -315,7 +320,6 @@ class Instagram
 
 
         $fetchStories = json_decode($this->curl('https://i.instagram.com/api/v1/feed/reels_media/?reel_ids=highlight:'.$highlightId, "GET", array(
-            "Cookie: sessionid=".$this->sessionId,
             "User-Agent: Instagram 64.0.0.14.96",
          )), true);
 
