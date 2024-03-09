@@ -1,25 +1,13 @@
 <?php
-$allowedOrigins = [
-    'https://instadp.io',
-    'https://example.com' ,
-];
-  
-if(in_array($_SERVER['HTTP_ORIGIN'], $allowedOrigins))
-{
-  $http_origin = $_SERVER['HTTP_ORIGIN'];
-} else {
-  $http_origin = "https://instadp.io";
-}
- header("Access-Control-Allow-Origin: $http_origin");
-
 header('Content-Type: application/json; charset=utf-8');
 require("./instagram.class.php");
 
 $instaApi = new Instagram();
 
-$instaApi->sessionId = "39408242373%3ALh57nkf0S6hU7f%3A14%3AAYd18dtdszRGvG8gFZm2ytAT_qJzvfIQkaZYzdvpdg";
+$instaApi->sessionId = "";
 
 $instaApi->proxy = null;
+
 
 switch ($_GET["type"]) {
 
@@ -54,5 +42,6 @@ switch ($_GET["type"]) {
         break;
 
 }
+
 
 ?>

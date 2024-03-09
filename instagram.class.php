@@ -35,10 +35,9 @@ class Instagram
 
 
         $result = json_decode($this->curl("https://i.instagram.com/api/v1/users/web_profile_info/?username=".$username, "GET", array(
-            "Cookie: sessionid=".$this->sessionId,
+            "Cookie: sessionid=0;",
             "User-Agent: Instagram 64.0.0.14.96",
          )));  
-
 
 
         
@@ -214,7 +213,7 @@ class Instagram
         $username = $this->extractUsernameFromInstagramURL($url);
 
         $result = json_decode($this->curl("https://i.instagram.com/api/v1/users/web_profile_info/?username=".$username, "GET", array(
-            "Cookie: sessionid=".$this->sessionId,
+            "Cookie: sessionid=0;",
             "User-Agent: Instagram 64.0.0.14.96",
          )));  
 
@@ -563,5 +562,7 @@ class Instagram
 
 
 }
+
+
 
 ?>
