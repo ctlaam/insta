@@ -517,8 +517,6 @@ class Instagram
 		curl_setopt($s,CURLOPT_RETURNTRANSFER, true);
 		// set option curl to return as string ,don't output directly
 		curl_setopt($s,CURLOPT_FOLLOWLOCATION, 1);
-		curl_setopt($s,CURLOPT_COOKIEJAR, 'cookie.txt');
-        curl_setopt($s,CURLOPT_COOKIEFILE, 'cookie.txt'); 
 		//set a cookie text file, make sure it is writable chmod 777 permission to cookie.txt
  
 		if(strtolower($method) == 'post')

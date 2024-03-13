@@ -2,11 +2,19 @@
 header('Content-Type: application/json; charset=utf-8');
 require("./instagram.class.php");
 
-$proxies = ["207.228.3.97:46889@eo4iTcxrgWzYt0q:33EhWsSqbseKZZW"];
+$proxies = json_decode(file_get_contents('./data/proxies.json'), true);
 
 $instaApi = new Instagram();
 
-$instaApi->sessionId = "39408242373%3ABfpl5LU4CozMRT%3A11%3AAYfXm2lyFZj3YIto8RMXu1zbm8greyAmX08SYA0Uwg;";
+$json_string = file_get_contents('./data/data.json');
+
+// Decode JSON string into a PHP array
+$data = json_decode($json_string, true);
+
+// Get a random element from the array
+$random_element = $data[array_rand($data)];
+
+$instaApi->sessionId = $random_element;
 
 $instaApi->proxy = array_rand($proxies);
 
