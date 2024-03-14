@@ -15,6 +15,16 @@ class Instagram
     // method declaration
     public function downloadAvatar($url) {
 
+
+
+
+        $proxies = json_decode(file_get_contents('./data/proxies.json'), true);
+        $data = json_decode(file_get_contents('./data/data.json'), true);
+
+
+
+
+
         if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
 
             $url = "https://www.instagram.com/".str_replace("@", "", $url);
@@ -34,23 +44,40 @@ class Instagram
 
 
 
-        $result = $this->curl("https://i.instagram.com/api/v1/users/web_profile_info/?username=".$username, "GET", array(
+        $result1 = $this->curl("https://i.instagram.com/api/v1/users/web_profile_info/?username=".$username, "GET", array(
             "Cookie: sessionid=".$this->sessionId,
             "User-Agent: Instagram 64.0.0.14.96",
         ));  
 
 
-        $result = json_decode($result);
+        $result = json_decode($result1);
 
         
 
 
         
 
-        if (!isset($result->data->user->id)) {
+        if (!isset($result->data->user->id) && !checkForText($result1)) {
+
+            if (($key = array_search($this->sessionId, $data)) !== false) {
+
+                unset($data[$key]);
+                file_put_contents("./data/data.json", json_encode($data, JSON_PRETTY_PRINT));
+
+                $this->sessionId = $data[array_rand($data)];
+
+                return downloadAvatar($url);
+
+            }
+
             return [
                 "success" => false,
                 "message" => "Không thể lấy info từ instagram"
+            ];
+        }else{
+            return [
+                "success" => false,
+                "message" => "Không tồn tại tk"
             ];
         }
 
@@ -64,6 +91,15 @@ class Instagram
 
 
         if (!isset($queryApi->user->hd_profile_pic_url_info->url)) {
+            if (($key = array_search($this->sessionId, $data)) !== false) {
+                unset($data[$key]);
+                file_put_contents("./data/data.json", json_encode($data, JSON_PRETTY_PRINT));
+
+                $this->sessionId = $data[array_rand($data)];
+
+                return downloadAvatar($url);
+
+            }
             return [
                 "success" => false,
                 "message" => "Không thể lấy info từ instagram"
@@ -85,6 +121,9 @@ class Instagram
 
     public function downloadPost($url) {
 
+        $proxies = json_decode(file_get_contents('./data/proxies.json'), true);
+        $data = json_decode(file_get_contents('./data/data.json'), true);
+
         if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
 
             return [
@@ -96,16 +135,35 @@ class Instagram
 
         $url = strtok($url, "?")."?__a=1&__d=dis";
 
-        $result = json_decode($this->curl($url, "GET", array(
+        $result1 = $this->curl($url, "GET", array(
             "Cookie: sessionid=".$this->sessionId,
             "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-         )));
-        
+         ));
 
-        if (!isset($result->items[0]->product_type)) {
+        
+        $result = json_decode($result1);
+
+        if (!isset($result->items[0]->product_type) && !checkForText($result1)) {
+
+            if (($key = array_search($this->sessionId, $data)) !== false) {
+                unset($data[$key]);
+                file_put_contents("./data/data.json", json_encode($data, JSON_PRETTY_PRINT));
+
+                $this->sessionId = $data[array_rand($data)];
+
+                return downloadAvatar($url);
+
+            }
+
+
             return [
                 "success" => false,
                 "message" => "k lấy được info"
+            ];
+        }else{
+            return [
+                "success" => false,
+                "message" => "k tồn tại"
             ];
         }
 
@@ -185,9 +243,10 @@ class Instagram
     
     }
 
-
-
     public function downloadStories($url) {
+
+        $proxies = json_decode(file_get_contents('./data/proxies.json'), true);
+        $data = json_decode(file_get_contents('./data/data.json'), true);
 
         if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
 
@@ -218,15 +277,31 @@ class Instagram
 
         $username = $this->extractUsernameFromInstagramURL($url);
 
-        $result = json_decode($this->curl("https://i.instagram.com/api/v1/users/web_profile_info/?username=".$username, "GET", array(
+        $result1 = $this->curl("https://i.instagram.com/api/v1/users/web_profile_info/?username=".$username, "GET", array(
             "Cookie: sessionid=".$this->sessionId,
             "User-Agent: Instagram 64.0.0.14.96",
-         )));  
+         ));  
 
-        if (!isset($result->data->user->id)) {
+        $result = json_decode($result1);
+
+        if (!isset($result->data->user->id) && !checkForText($result1)) {
+            if (($key = array_search($this->sessionId, $data)) !== false) {
+                unset($data[$key]);
+                file_put_contents("./data/data.json", json_encode($data, JSON_PRETTY_PRINT));
+
+                $this->sessionId = $data[array_rand($data)];
+
+                return downloadAvatar($url);
+
+            }
             return [
                 "success" => false,
                 "message" => "Không thể lấy info từ instagram"
+            ];
+        }else{
+            return [
+                "success" => false,
+                "message" => "k tồn tại"
             ];
         }
 
@@ -281,9 +356,10 @@ class Instagram
     
     }
 
-
-
     public function downloadHighlightStories($url) {
+
+        $proxies = json_decode(file_get_contents('./data/proxies.json'), true);
+        $data = json_decode(file_get_contents('./data/data.json'), true);
 
         if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
 
@@ -372,6 +448,9 @@ class Instagram
     public function downloadReels($url)
     {
 
+        $proxies = json_decode(file_get_contents('./data/proxies.json'), true);
+        $data = json_decode(file_get_contents('./data/data.json'), true);
+
         if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
 
             return [
@@ -439,6 +518,17 @@ class Instagram
                 "success" => false,
                 "message" => "error"
             ];
+        }
+    }
+
+
+    function checkForText($text) {
+        // Check if the text contains both "error-container -cx-PRIVATE-ErrorPage__errorContainer -cx-PRIVATE-ErrorPage__errorContainer__" and "no-js logged-in"
+        if (strpos($text, 'error-container -cx-PRIVATE-ErrorPage__errorContainer -cx-PRIVATE-ErrorPage__errorContainer__') !== false &&
+            strpos($text, 'no-js logged-in') !== false) {
+            return true; // Both strings are present
+        } else {
+            return false; // Either one or both strings are not present
         }
     }
 
